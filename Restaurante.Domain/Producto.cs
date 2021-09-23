@@ -33,7 +33,7 @@ namespace Inventario.Domain
             return $"Hecho: su nueva cantidad es {Cantidad}.";
         }
 
-        public string Salida(double pCantidad, ReadOnlyCollection<Producto> Stock = null)
+        public virtual string Salida(double pCantidad, ReadOnlyCollection<Producto> Stock = null)
         {
             if(Ingredientes.Count <= 0)
             {
@@ -43,28 +43,30 @@ namespace Inventario.Domain
                 Cantidad -= pCantidad;
                 return $"Hecho: su nueva cantidad es {Cantidad}.";
             }
-            else if(Stock == null)
-                return $"Error: no cuenta con los ingredientes suficientes para {Nombre}.";
-            else
-            {
-                foreach (Ingrediente oRow in Ingredientes)
-                {
-                    var oCantidadoProducto = pCantidad * oRow.Cantidad;
-                    var oProducto = Stock.FirstOrDefault(oProd => oProd.Id == oRow.ProductoId);
-                    if (oProducto == null)
-                        return $"Error: no cuenta con los ingredientes suficientes para {Nombre}.";
-                    if (oProducto.Cantidad < oCantidadoProducto)
-                        return $"Error: no cuenta con los ingredientes suficientes para {Nombre}.";
-                }
-                //Decreción
-                foreach (Ingrediente oRow in Ingredientes)
-                {
-                    var oCantidadoProducto = pCantidad * oRow.Cantidad;
-                    var oProducto = Stock.FirstOrDefault(oProd => oProd.Id == oRow.ProductoId);
-                    oProducto.Salida(oCantidadoProducto);
-                }
-                return $"Hecho: se ha generado {pCantidad} de {Nombre}.";
-            }
+
+            return $"Error: este producto es compuesto pero se está tratando como uno simple.";
+            //else if(Stock == null)
+            //    return $"Error: no cuenta con los ingredientes suficientes para {Nombre}.";
+            //else
+            //{
+            //    foreach (Ingrediente oRow in Ingredientes)
+            //    {
+            //        var oCantidadoProducto = pCantidad * oRow.Cantidad;
+            //        var oProducto = Stock.FirstOrDefault(oProd => oProd.Id == oRow.ProductoId);
+            //        if (oProducto == null)
+            //            return $"Error: no cuenta con los ingredientes suficientes para {Nombre}.";
+            //        if (oProducto.Cantidad < oCantidadoProducto)
+            //            return $"Error: no cuenta con los ingredientes suficientes para {Nombre}.";
+            //    }
+            //    //Decreción
+            //    foreach (Ingrediente oRow in Ingredientes)
+            //    {
+            //        var oCantidadoProducto = pCantidad * oRow.Cantidad;
+            //        var oProducto = Stock.FirstOrDefault(oProd => oProd.Id == oRow.ProductoId);
+            //        oProducto.Salida(oCantidadoProducto);
+            //    }
+            //    return $"Hecho: se ha generado {pCantidad} de {Nombre}.";
+            //}
         }
 
         private bool ValidarStock(double pCantidad)
