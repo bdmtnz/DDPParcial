@@ -14,6 +14,7 @@ namespace Inventario.Domain
         public double Costo { get; private set; }
         public double Precio { get; private set; }
         public double Utilidad => Precio - Costo;
+        public List<Ingrediente> Ingredientes { get; protected set; }
 
         public Producto(ProductoDTO pDatos)
         {
@@ -22,6 +23,7 @@ namespace Inventario.Domain
             Cantidad = pDatos.Cantidad;
             Costo = pDatos.Costo;
             Precio = pDatos.Precio;
+            Ingredientes = pDatos.Ingredientes;
         }
 
         public string Entrada(double pCantidad)
@@ -30,11 +32,44 @@ namespace Inventario.Domain
             return $"Hecho: su nueva cantidad es {Cantidad}.";
         }
 
-        public string Salida(double pCantidad)
+        public string Salida(double pCantidad, List<Producto> Stock = null)
         {
-            return "";
+            if(Ingredientes.Count <= 0)
+            {
+                if(ValidarStock(pCantidad))
+                    return $"Error: no cuenta con las unidades suficientes de {Nombre}.";
+
+                Cantidad -= pCantidad;
+                return $"Hecho: su nueva cantidad es {Cantidad}.";
+            }
+            else if(Stock == null)
+                return $"Error: no cuenta con los ingredientes suficientes para {Nombre}.";
+            else
+            {
+                foreach (Ingrediente oRow in Ingredientes)
+                {
+                    var oCantidadoProducto = pCantidad * oRow.Cantidad;
+                    var oProducto = Stock.FirstOrDefault(oProd => oProd.Id == oRow.ProductoId);
+                    if (oProducto == null)
+                        return $"Error: no cuenta con los ingredientes suficientes para {Nombre}.";
+                    if (oProducto.Cantidad < oCantidadoProducto)
+                        return $"Error: no cuenta con los ingredientes suficientes para {Nombre}.";
+                }
+                //Decreción
+                foreach (Ingrediente oRow in Ingredientes)
+                {
+                    var oCantidadoProducto = pCantidad * oRow.Cantidad;
+                    var oProducto = Stock.FirstOrDefault(oProd => oProd.Id == oRow.ProductoId);
+                    oProducto.Salida(oCantidadoProducto);
+                }
+                return $"Hecho: se ha generado {pCantidad} de {Nombre}.";
+            }
         }
 
+        private bool ValidarStock(double pCantidad)
+        {
+            return Cantidad < pCantidad;
+        }
     }
 
     public class ProductoDTO
@@ -44,6 +79,7 @@ namespace Inventario.Domain
         public double Cantidad { get; set; }
         public double Costo { get; set; }
         public double Precio { get; set; }
+        public List<Ingrediente> Ingredientes { get; set; }
     }
 
 }

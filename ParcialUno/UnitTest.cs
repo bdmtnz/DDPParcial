@@ -44,6 +44,7 @@ namespace ParcialUno
         [TestMethod]
         public void SalidaDeProducto()
         {
+
             var oProductos = new List<Producto>()
             {
                 new Producto
@@ -53,8 +54,29 @@ namespace ParcialUno
                         Id = 1,
                         Cantidad = 0,
                         Costo = 1000,
-                        Nombre = "Sachicha",
-                        Precio = 1500
+                        Nombre = "Salchicha",
+                        Precio = 1500,
+                        Ingredientes = new List<Ingrediente>()
+                    }
+                ),
+                new Compuesto
+                (
+                    new ProductoDTO()
+                    {
+                        Id = 2,
+                        Cantidad = 0,
+                        Costo = 1000,
+                        Nombre = "Perro",
+                        Precio = 1500,
+                        Ingredientes = new List<Ingrediente>()
+                        {
+                            new Ingrediente()
+                            {
+                                ProductoId = 1,
+                                Cantidad = 1,
+                                Costo = 1000
+                            }
+                        }
                     }
                 )
             };
@@ -65,7 +87,7 @@ namespace ParcialUno
                 oProductos
             );
 
-            var Respuesta = oRestaurante.Salida(1, 10);
+            var Respuesta = oRestaurante.Salida(2, 10);
 
             if (Respuesta.ToString().Contains("Error:"))
                 throw new AssertFailedException(Respuesta.ToString());
