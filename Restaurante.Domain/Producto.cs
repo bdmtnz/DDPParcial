@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -32,7 +33,7 @@ namespace Inventario.Domain
             return $"Hecho: su nueva cantidad es {Cantidad}.";
         }
 
-        public string Salida(double pCantidad, List<Producto> Stock = null)
+        public string Salida(double pCantidad, ReadOnlyCollection<Producto> Stock = null)
         {
             if(Ingredientes.Count <= 0)
             {

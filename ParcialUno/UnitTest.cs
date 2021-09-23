@@ -33,6 +33,7 @@ namespace ParcialUno
             string pNombreCompuesto = "Compuesto"
         )
         {
+            #region Preparacion
             var oProductos = new List<Producto>()
             {
                 new Producto
@@ -80,6 +81,7 @@ namespace ParcialUno
                 "Doña chepita",
                 oProductos
             );
+            #endregion
 
             var Respuesta = oRestaurante.Entrada(pId, pEntrada);
 
@@ -120,6 +122,7 @@ namespace ParcialUno
             string pNombreCompuesto = "Compuesto"
         )
         {
+            #region Preparacion
             var oProductos = new List<Producto>()
             {
                 new Producto
@@ -130,7 +133,7 @@ namespace ParcialUno
                         Cantidad = pCantidad,
                         Costo = pCosto,
                         Nombre = pNombre,
-                        Precio = pPrecio,
+                        Precio = pEsCompuesto ? pPrecio - 100 : pPrecio,
                         Ingredientes = new List<Ingrediente>()
                     }
                 )
@@ -145,7 +148,7 @@ namespace ParcialUno
                         {
                             Id = pId,
                             Nombre = pNombreCompuesto,
-                            Precio = 1500,
+                            Precio = pPrecio,
                             Ingredientes = new List<Ingrediente>()
                             {
                                 new Ingrediente()
@@ -165,13 +168,35 @@ namespace ParcialUno
                 "Doña chepita",
                 oProductos
             );
+            #endregion
 
             var Respuesta = oRestaurante.Salida(pId, pSalida);
 
             if (Respuesta.ToString().Contains("Error:") && !pRojo)
                 throw new AssertFailedException(Respuesta.ToString());
 
+            //Validación de la venta
+            if (!Respuesta.ToString().Contains("Error:"))
+            {
+                var Indice = oRestaurante.Ventas.Count;
+                if(Indice <= 0)
+                    throw new AssertFailedException($"Error: no se registro la venta");
+                var UltimaVenta = oRestaurante.Ventas[Indice - 1];
+                if (ValidarVenta(pCosto, pPrecio, UltimaVenta))
+                    throw new AssertFailedException($"Error: inconsistencia en los registros de la venta esperados: ({1000},{2500}) vs obtenidos: ({UltimaVenta.Costo},{UltimaVenta.Precio})");
+            }
+
             Console.WriteLine(Respuesta);
+        }
+
+        private bool ValidarVenta(double pCosto, double pPrecio, Venta pVenta)
+        {
+            if (pVenta.Costo != pCosto)
+                return true;
+            if (pVenta.Precio != pPrecio)
+                return true;
+            else
+                return false;
         }
     }
 }
