@@ -108,7 +108,7 @@ namespace ParcialUno
         [DataRow(2, 0, 0, "Salchicha", 0, 0, true, DisplayName = "(Rojo) Caso de prueba salida en cero")]
         [DataRow(2, 0, 1000, "Salchicha", 1500, 1, true, true, DisplayName = "(Rojo) Caso de prueba salida de compuesto sin stock de ingredientes")]
         [DataRow(2, 2, 1000, "Salchicha", 1500, 1, false, DisplayName = "(Verde) Caso de prueba escenario correcto simple")]
-        [DataRow(2, 2, 1000, "Salchicha", 1500, 1, false, true, "Perro", DisplayName = "(Verde) Caso de prueba escenario correcto compuesto")]
+        [DataRow(2, 2, 1000, "Salchicha", 1500, 1, false, true, "Perro", 2, DisplayName = "(Verde) Caso de prueba escenario correcto compuesto")]
         public void SalidaDeProducto
         (
             int pId,
@@ -119,7 +119,8 @@ namespace ParcialUno
             double pSalida,
             bool pRojo = false,
             bool pEsCompuesto = false,
-            string pNombreCompuesto = "Compuesto"
+            string pNombreCompuesto = "Compuesto",
+            double pCantidadIngrediente = 1
         )
         {
             #region Preparacion
@@ -154,7 +155,7 @@ namespace ParcialUno
                                 new Ingrediente()
                                 {
                                     ProductoId = pId + 1,
-                                    Cantidad = 1,
+                                    Cantidad = pCantidadIngrediente,
                                     Costo = pCosto
                                 }
                             }
@@ -182,7 +183,7 @@ namespace ParcialUno
                 if(Indice <= 0)
                     throw new AssertFailedException($"Error: no se registro la venta");
                 var UltimaVenta = oRestaurante.Ventas[Indice - 1];
-                if (ValidarVenta(pCosto, pPrecio, UltimaVenta))
+                if (ValidarVenta(pCosto * pCantidadIngrediente, pPrecio, UltimaVenta))
                     throw new AssertFailedException($"Error: inconsistencia en los registros de la venta esperados: ({1000},{2500}) vs obtenidos: ({UltimaVenta.Costo},{UltimaVenta.Precio})");
             }
 
