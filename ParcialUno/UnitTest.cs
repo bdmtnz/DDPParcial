@@ -2,6 +2,7 @@
 using System;
 
 using Inventario.Domain;
+using System.Collections.Generic;
 
 namespace ParcialUno
 {
@@ -11,12 +12,31 @@ namespace ParcialUno
         [TestMethod]
         public void EntradaDeProducto()
         {
-            var oRestaurante = new Restaurante();
+            var oProductos = new List<Producto>()
+            {
+                new Producto
+                (
+                    new ProductoDTO()
+                    {
+                        Id = 1,
+                        Cantidad = 0,
+                        Costo = 1000,
+                        Nombre = "Sachicha",
+                        Precio = 1500
+                    }
+                )
+            };
+            var oRestaurante = new Restaurante
+            (
+                1,
+                "Doña chepita",
+                oProductos
+            );
 
-            var Respuesta = oRestaurante.Entrada("Salchicha", 1);
+            var Respuesta = oRestaurante.Entrada(1, 10);
 
             if (Respuesta.ToString().Contains("Error:"))
-                new AssertFailedException(Respuesta.ToString());
+                throw new AssertFailedException(Respuesta.ToString());
 
             Console.WriteLine(Respuesta);
         }
