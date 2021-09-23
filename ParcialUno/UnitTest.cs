@@ -40,5 +40,37 @@ namespace ParcialUno
 
             Console.WriteLine(Respuesta);
         }
+
+        [TestMethod]
+        public void SalidaDeProducto()
+        {
+            var oProductos = new List<Producto>()
+            {
+                new Producto
+                (
+                    new ProductoDTO()
+                    {
+                        Id = 1,
+                        Cantidad = 0,
+                        Costo = 1000,
+                        Nombre = "Sachicha",
+                        Precio = 1500
+                    }
+                )
+            };
+            var oRestaurante = new Restaurante
+            (
+                1,
+                "Doña chepita",
+                oProductos
+            );
+
+            var Respuesta = oRestaurante.Salida(1, 10);
+
+            if (Respuesta.ToString().Contains("Error:"))
+                throw new AssertFailedException(Respuesta.ToString());
+
+            Console.WriteLine(Respuesta);
+        }
     }
 }

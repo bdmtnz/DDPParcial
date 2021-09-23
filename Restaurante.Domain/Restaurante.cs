@@ -25,11 +25,19 @@ namespace Inventario.Domain
             if (Productos.Count <= 0)
                 return "Error: No hay productos registrados.";
 
+            if (pCantidad <= 0)
+                return "Error: La cantidad debe ser mayor a cero.";
+
             var oProducto = Productos.FirstOrDefault(oRow => oRow.Id == pProducto);
             if(oProducto == null)
                 return $"Error: No hay productos registrados que coincidan con '{pProducto}'.";
 
             return oProducto.Entrada(pCantidad);
+        }
+
+        public string Salida(int pProducto, double pCantidad)
+        {
+            throw new NotImplementedException();
         }
     }
 }
