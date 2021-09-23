@@ -2,7 +2,7 @@
 
 namespace Restaurante.Dominio
 {
-    public class Class1
+    public class Restaurante
     {
     }
 }

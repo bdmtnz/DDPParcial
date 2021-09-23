@@ -1,0 +1,6 @@
+C:\Users\bdmtnz\source\repos\ParcialUno\Restaurante.Domain\bin\Debug\Restaurante.Domain.dll
+C:\Users\bdmtnz\source\repos\ParcialUno\Restaurante.Domain\bin\Debug\Restaurante.Domain.pdb
+C:\Users\bdmtnz\source\repos\ParcialUno\Restaurante.Domain\obj\Debug\Inventario.Domain.csproj.AssemblyReference.cache
+C:\Users\bdmtnz\source\repos\ParcialUno\Restaurante.Domain\obj\Debug\Inventario.Domain.csproj.CoreCompileInputs.cache
+C:\Users\bdmtnz\source\repos\ParcialUno\Restaurante.Domain\obj\Debug\Restaurante.Domain.dll
+C:\Users\bdmtnz\source\repos\ParcialUno\Restaurante.Domain\obj\Debug\Restaurante.Domain.pdb

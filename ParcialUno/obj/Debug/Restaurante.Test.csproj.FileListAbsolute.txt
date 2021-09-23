@@ -1,0 +1,2 @@
+C:\Users\bdmtnz\source\repos\ParcialUno\ParcialUno\obj\Debug\Restaurante.Test.csproj.AssemblyReference.cache
+C:\Users\bdmtnz\source\repos\ParcialUno\ParcialUno\obj\Debug\Restaurante.Test.csproj.CoreCompileInputs.cache
