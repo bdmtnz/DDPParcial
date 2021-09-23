@@ -44,7 +44,7 @@ namespace Inventario.Domain
             if (oProducto == null)
                 return $"Error: No hay productos registrados que coincidan con '{pProducto}'.";
 
-            return oProducto.Salida(pCantidad);
+            return oProducto.Salida(pCantidad, Productos);
         }
     }
 }

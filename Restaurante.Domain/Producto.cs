@@ -11,7 +11,7 @@ namespace Inventario.Domain
         public int Id { get; private set; }
         public string Nombre { get; private set; }
         public double Cantidad { get; private set; }
-        public double Costo { get; private set; }
+        public virtual double Costo { get; private set; }
         public double Precio { get; private set; }
         public double Utilidad => Precio - Costo;
         public List<Ingrediente> Ingredientes { get; protected set; }
@@ -26,7 +26,7 @@ namespace Inventario.Domain
             Ingredientes = pDatos.Ingredientes;
         }
 
-        public string Entrada(double pCantidad)
+        public virtual string Entrada(double pCantidad)
         {
             Cantidad += pCantidad;
             return $"Hecho: su nueva cantidad es {Cantidad}.";
