@@ -15,7 +15,6 @@ namespace Inventario.Domain
         public virtual double Costo { get; private set; }
         public virtual double Precio { get; private set; }
         public double Utilidad => Precio - Costo;
-        public List<Ingrediente> Ingredientes { get; protected set; }
 
         public Producto(ProductoDTO pDatos)
         {
@@ -24,7 +23,6 @@ namespace Inventario.Domain
             Cantidad = pDatos.Cantidad;
             Costo = pDatos.Costo;
             Precio = pDatos.Precio;
-            Ingredientes = pDatos.Ingredientes ?? new List<Ingrediente>();
         }
 
         public virtual string Entrada(double pCantidad)
@@ -35,38 +33,11 @@ namespace Inventario.Domain
 
         public virtual string Salida(double pCantidad, ReadOnlyCollection<Producto> Stock = null)
         {
-            if(Ingredientes.Count <= 0)
-            {
-                if(ValidarStock(pCantidad))
-                    return $"Error: no cuenta con las unidades suficientes de {Nombre}.";
+            if (ValidarStock(pCantidad))
+                return $"Error: no cuenta con las unidades suficientes de {Nombre}.";
 
-                Cantidad -= pCantidad;
-                return $"Hecho: su nueva cantidad es {Cantidad}.";
-            }
-
-            return $"Error: este producto es compuesto pero se está tratando como uno simple.";
-            //else if(Stock == null)
-            //    return $"Error: no cuenta con los ingredientes suficientes para {Nombre}.";
-            //else
-            //{
-            //    foreach (Ingrediente oRow in Ingredientes)
-            //    {
-            //        var oCantidadoProducto = pCantidad * oRow.Cantidad;
-            //        var oProducto = Stock.FirstOrDefault(oProd => oProd.Id == oRow.ProductoId);
-            //        if (oProducto == null)
-            //            return $"Error: no cuenta con los ingredientes suficientes para {Nombre}.";
-            //        if (oProducto.Cantidad < oCantidadoProducto)
-            //            return $"Error: no cuenta con los ingredientes suficientes para {Nombre}.";
-            //    }
-            //    //Decreción
-            //    foreach (Ingrediente oRow in Ingredientes)
-            //    {
-            //        var oCantidadoProducto = pCantidad * oRow.Cantidad;
-            //        var oProducto = Stock.FirstOrDefault(oProd => oProd.Id == oRow.ProductoId);
-            //        oProducto.Salida(oCantidadoProducto);
-            //    }
-            //    return $"Hecho: se ha generado {pCantidad} de {Nombre}.";
-            //}
+            Cantidad -= pCantidad;
+            return $"Hecho: su nueva cantidad es {Cantidad}.";
         }
 
         private bool ValidarStock(double pCantidad)

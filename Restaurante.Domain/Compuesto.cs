@@ -9,13 +9,13 @@ namespace Inventario.Domain
 {
     public class Compuesto : Producto
     {
-        public override double Cantidad { get; protected set; }
-        public override double Costo => Ingredientes.Sum(oRow => Cantidad * oRow.Costo * oRow.Cantidad);
-        public override double Precio => Ingredientes.Sum(oRow => Cantidad * oRow.Precio * oRow.Cantidad);
+        public List<Ingrediente> Ingredientes { get; protected set; }
+        public override double Costo => Ingredientes.Sum(oRow =>  oRow.Costo * oRow.Cantidad);
+        public override double Precio => Ingredientes.Sum(oRow =>  oRow.Precio * oRow.Cantidad);
 
         public Compuesto(ProductoDTO pDatos) : base(pDatos)
         {
-
+            Ingredientes = pDatos.Ingredientes ?? new List<Ingrediente>();
         }
 
         public override string Entrada(double pCantidad)
@@ -31,24 +31,24 @@ namespace Inventario.Domain
                 return $"Error: no cuenta con los ingredientes suficientes para {Nombre}.";
             else
             {
+                var Rollback = new List<Movimiento>();
                 foreach (Ingrediente oRow in Ingredientes)
                 {
                     var oCantidadoProducto = pCantidad * oRow.Cantidad;
                     var oProducto = Stock.FirstOrDefault(oProd => oProd.Id == oRow.ProductoId);
                     if (oProducto == null)
                         return $"Error: no cuenta con los ingredientes suficientes para {Nombre}.";
-                    if (oProducto.Cantidad < oCantidadoProducto)
-                        return $"Error: no cuenta con los ingredientes suficientes para {Nombre}.";
+                    // if (oProducto.Cantidad < oCantidadoProducto)
+                    //    return $"Error: no cuenta con los ingredientes suficientes para {Nombre}.";
+                    // Peligro de errores anteriores que disminuyeron el stock y dañen la integridad
+                    // Se maneja con un rollback desde DB
+                    var Respuesta = oProducto.Salida(oCantidadoProducto, Stock);
+                    if (Respuesta.Contains("Error:"))
+                        return Respuesta;
                 }
-                //Decreción
-                foreach (Ingrediente oRow in Ingredientes)
-                {
-                    var oCantidadoProducto = pCantidad * oRow.Cantidad;
-                    var oProducto = Stock.FirstOrDefault(oProd => oProd.Id == oRow.ProductoId);
-                    oProducto.Salida(oCantidadoProducto);
-                }
+
                 this.Cantidad = pCantidad;
-                return $"Hecho: se ha generado {pCantidad} de {Nombre} (Costo: {Costo}, Precio: {Precio}, Utilidad: {Utilidad}).";
+                return $"Hecho: se ha generado {pCantidad} de {Nombre} (Costo: {Costo * Cantidad}, Precio: {Precio * Cantidad}, Utilidad: {Utilidad * Cantidad}).";
             }
         }
 

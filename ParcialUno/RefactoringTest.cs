@@ -43,8 +43,8 @@ namespace ParcialUno
                 oProductos
             );
 
-            var Entrada = new Entrada(1, -1);
-            var Respuesta = oRestaurante.Entrada(new List<Entrada>() { Entrada });
+            var Entrada = new Movimiento(oProductos[0], -1);
+            var Respuesta = oRestaurante.Entrada(new List<Movimiento>() { Entrada });
 
             Assert.AreEqual("Error: La cantidad debe ser mayor a cero.", Respuesta);
         }
@@ -82,17 +82,17 @@ namespace ParcialUno
                 oProductos
             );
 
-            var Entrada = new Entrada(1, 10);
-            var Respuesta = oRestaurante.Entrada(new List<Entrada>() { Entrada });
+            var Entrada = new Movimiento(oProductos[0], 10);
+            var Respuesta = oRestaurante.Entrada(new List<Movimiento>() { Entrada });
 
             Assert.AreEqual("Hecho: su nueva cantidad es 10.", Respuesta);
         }
 
         /*
-         Salida de producto -1
+        Salida de producto -1
         H2: COMO USUARIO QUIERO REGISTRAR LA SALIDA PRODUCTOS
         Criterio de aceptación:
-        2.1. La cantidad de la salida de debe ser mayor a 0
+        2.1. La cantidad de la Movimiento de debe ser mayor a 0
         Dado	En el restaurante hay producto nombre: “Gaseosa”, cantidad: 10, costo: 1000, precio: 2000, utilidad:1000
         Cuando	Se retira producto de -1
         Entonces	El sistema arrojara un mensaje “La cantidad de salida es incorrecta”
@@ -122,16 +122,16 @@ namespace ParcialUno
                 oProductos
             );
 
-            var Salida = new Salida(1, -1);
-            string Respuesta = oRestaurante.Salida(new List<Salida>() { Salida });
+            var Movimiento = new Movimiento(oProductos[0], -1);
+            string Respuesta = oRestaurante.Salida(new List<Movimiento>() { Movimiento });
 
             Assert.AreEqual("Error: La cantidad debe ser mayor a cero.", Respuesta);
         }
         /*
          Disminuir cantidad de productos salientes
-        H2: COMO USUARIO QUIERO REGISTRAR LA SALIDA PRODUCTOS
+        H2: COMO USUARIO QUIERO REGISTRAR LA Movimiento PRODUCTOS
         Criterio de aceptación:
-        2.2. En caso de un producto sencillo la cantidad de la salida se le disminuirá a la cantidad existente del producto.
+        2.2. En caso de un producto sencillo la cantidad de la Movimiento se le disminuirá a la cantidad existente del producto.
         Dado	En el restaurante hay producto nombre: “Gaseosa”, cantidad: 10, costo: 1000, precio: 2000, utilidad:1000
         Cuando	Se retira producto de 2
         Entonces	El sistema arrojara un mensaje “La cantidad de Gaseosa restante es de 8”
@@ -161,17 +161,17 @@ namespace ParcialUno
                 oProductos
             );
 
-            var Salida = new Salida(1, 2);
-            string Respuesta = oRestaurante.Salida(new List<Salida>() { Salida });
+            var Movimiento = new Movimiento(oProductos[0], 2);
+            string Respuesta = oRestaurante.Salida(new List<Movimiento>() { Movimiento });
 
             Assert.AreEqual("Hecho: su nueva cantidad es 8.", Respuesta);
         }
         /*
             Disminuir cantidad de productos compuestos salientes y guardar la venta
-            H2: COMO USUARIO QUIERO REGISTRAR LA SALIDA PRODUCTOS
+            H2: COMO USUARIO QUIERO REGISTRAR LA Movimiento PRODUCTOS
             Criterio de aceptación:
-            2.3. En caso de un producto compuesto la cantidad de la salida se le disminuirá a la cantidad existente de cada uno de su ingrediente
-            2. 4. Cada salida debe registrar el costo del producto y el precio de la venta
+            2.3. En caso de un producto compuesto la cantidad de la Movimiento se le disminuirá a la cantidad existente de cada uno de su ingrediente
+            2. 4. Cada Movimiento debe registrar el costo del producto y el precio de la venta
             Dado	En el restaurante quiere hacer un combo perro doble y tiene productos: nombre: “Gaseosa”, cantidad: 10, costo: 1000, precio: 2000, utilidad:1000
             “Salchicha”, cantidad: 40, costo: 1000, precio: 2000, utilidad:1000
             “Laminas queso Mozarela”, cantidad: 100, costo: 700, precio: 1500, utilidad: 800
@@ -230,27 +230,40 @@ namespace ParcialUno
                 }
             );
 
+            var Perro = new Compuesto
+            (
+                new ProductoDTO()
+                {
+                    Id = 5,
+                    Nombre = "Perro",
+                    Ingredientes = new List<Ingrediente>()
+                    {
+                        new Ingrediente(Salchicha, 2),
+                        new Ingrediente(Lamina, 2),
+                        new Ingrediente(Pan, 1)
+                    }
+                }
+            );
+
             var oProductos = new List<Producto>()
             {
                 Gaseosa,
                 Salchicha,
                 Lamina,
-                Pan
+                Pan,
+                Perro
             };
 
             var oProductoVendido = new Compuesto
             (
                 new ProductoDTO()
                 {
-                    Id = 5,
+                    Id = 6,
                     Nombre = "Combo perro",
-                    Precio = 1500,
                     Ingredientes = new List<Ingrediente>()
                     {
-                        new Ingrediente(Salchicha, 2),
                         new Ingrediente(Gaseosa, 1),
-                        new Ingrediente(Lamina, 2),
-                        new Ingrediente(Pan, 1)
+                        new Ingrediente(Perro, 1)
                     }
                 }
             );
@@ -267,8 +280,8 @@ namespace ParcialUno
                 oProductos
             );
 
-            var Salida = new Salida(5, 2);
-            string Respuesta = oRestaurante.Salida(new List<Salida>() { Salida });
+            var Movimiento = new Movimiento(oProductoVendido, 2);
+            string Respuesta = oRestaurante.Salida(new List<Movimiento>() { Movimiento });
 
             Assert.AreEqual("Hecho: se ha generado 2 de Combo perro (Costo: 10800, Precio: 21000, Utilidad: 10200).", Respuesta);
 
@@ -278,10 +291,10 @@ namespace ParcialUno
 
         /*
             Disminuir cantidad de productos compuestos salientes y guardar la venta
-            H2: COMO USUARIO QUIERO REGISTRAR LA SALIDA PRODUCTOS
+            H2: COMO USUARIO QUIERO REGISTRAR LA Movimiento PRODUCTOS
             Criterio de aceptación:
-            2.3. En caso de un producto compuesto la cantidad de la salida se le disminuirá a la cantidad existente de cada uno de su ingrediente
-            2. 4. Cada salida debe registrar el costo del producto y el precio de la venta
+            2.3. En caso de un producto compuesto la cantidad de la Movimiento se le disminuirá a la cantidad existente de cada uno de su ingrediente
+            2. 4. Cada Movimiento debe registrar el costo del producto y el precio de la venta
             Dado	En el restaurante quiere hacer un combo perro doble y tiene productos: nombre: “Gaseosa”, cantidad: 10, costo: 1000, precio: 2000, utilidad:1000
             “Salchicha”, cantidad: 40, costo: 1000, precio: 2000, utilidad:1000
             “Laminas queso Mozarela”, cantidad: 100, costo: 700, precio: 1500, utilidad: 800
@@ -377,8 +390,8 @@ namespace ParcialUno
                 oProductos
             );
 
-            var Salida = new Salida(5, 2);
-            string Respuesta = oRestaurante.Salida(new List<Salida>() { Salida });
+            var Movimiento = new Movimiento(oProductoVendido, 2);
+            string Respuesta = oRestaurante.Salida(new List<Movimiento>() { Movimiento });
 
             Assert.AreEqual("Hecho: se ha generado 2 de Combo perro (Costo: 12800, Precio: 25000, Utilidad: 12200).", Respuesta);
 

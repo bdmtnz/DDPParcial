@@ -21,7 +21,7 @@ namespace Inventario.Domain
             Ventas = new List<Venta>();
         }
 
-        public string Entrada(List<Entrada> pEntradas)
+        public string Entrada(List<Movimiento> pEntradas)
         {
             if(Productos == null)
                 return "Error: No hay productos registrados.";
@@ -36,10 +36,10 @@ namespace Inventario.Domain
                 if (pEntradas[i].Cantidad <= 0)
                     return "Error: La cantidad debe ser mayor a cero.";
 
-                var oProducto = Productos.FirstOrDefault(oRow => oRow.Id == pEntradas[i].ProductoId);
+                var oProducto = Productos.FirstOrDefault(oRow => oRow.Id == pEntradas[i].Producto.Id);
 
                 if (oProducto == null)
-                    return $"Error: No hay productos registrados que coincidan con '{pEntradas[i].ProductoId}'.";
+                    return $"Error: No hay productos registrados que coincidan con '{pEntradas[i].Producto.Id}'.";
 
                 Respuestas += oProducto.Entrada(pEntradas[i].Cantidad) + ";";
             }
@@ -48,7 +48,7 @@ namespace Inventario.Domain
             return Respuestas;
         }
 
-        public string Salida(List<Salida> pSalidas)
+        public string Salida(List<Movimiento> pSalidas)
         {
             var Resultado = "";
             List<Producto> Vendidos = new List<Producto>();
@@ -58,27 +58,22 @@ namespace Inventario.Domain
                 if (pSalidas[i].Cantidad <= 0)
                     return "Error: La cantidad debe ser mayor a cero.";
 
-                var oProducto = Productos.FirstOrDefault(oRow => oRow.Id == pSalidas[i].ProductoId);
+                var oProducto = Productos.FirstOrDefault(oRow => oRow.Id == pSalidas[i].Producto.Id);
 
                 if (oProducto == null)
-                    return $"Error: No hay productos registrados que coincidan con '{pSalidas[i].ProductoId}'.";
+                    return $"Error: No hay productos registrados que coincidan con '{pSalidas[i].Producto.Id}'.";
 
                 Resultado += oProducto.Salida(pSalidas[i].Cantidad, oProductos) + ";";
                 Vendidos.Add(oProducto);
             }
 
             Resultado = Resultado.Trim(new char[] { ';' });
-            Vender(1, Vendidos);
-
-            return Resultado;
-        }
-
-        public void Vender(int pId, List<Producto> pVendidos)
-        {
             Ventas.Add
             (
-                new Venta(Ventas.Count, pVendidos)
+                new Venta(Ventas.Count, Vendidos)
             );
+
+            return Resultado;
         }
     }
 }
