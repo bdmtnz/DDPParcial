@@ -9,9 +9,7 @@ namespace Inventario.Domain
 {
     public class Compuesto : Producto
     {
-        public override double Cantidad { get; protected set; }
-        public override double Costo => Ingredientes.Sum(oRow => Cantidad * oRow.Costo * oRow.Cantidad);
-        public override double Precio => Ingredientes.Sum(oRow => Cantidad * oRow.Precio * oRow.Cantidad);
+        public override double Costo => Ingredientes.Sum(oRow => oRow.Costo * oRow.Cantidad);
 
         public Compuesto(ProductoDTO pDatos) : base(pDatos)
         {
@@ -47,8 +45,7 @@ namespace Inventario.Domain
                     var oProducto = Stock.FirstOrDefault(oProd => oProd.Id == oRow.ProductoId);
                     oProducto.Salida(oCantidadoProducto);
                 }
-                this.Cantidad = pCantidad;
-                return $"Hecho: se ha generado {pCantidad} de {Nombre} (Costo: {Costo}, Precio: {Precio}, Utilidad: {Utilidad}).";
+                return $"Hecho: se ha generado {pCantidad} de {Nombre}.";
             }
         }
 

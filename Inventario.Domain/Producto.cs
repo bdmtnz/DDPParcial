@@ -11,9 +11,9 @@ namespace Inventario.Domain
     {
         public int Id { get; private set; }
         public string Nombre { get; private set; }
-        public virtual double Cantidad { get; protected set; }
+        public double Cantidad { get; private set; }
         public virtual double Costo { get; private set; }
-        public virtual double Precio { get; private set; }
+        public double Precio { get; private set; }
         public double Utilidad => Precio - Costo;
         public List<Ingrediente> Ingredientes { get; protected set; }
 
@@ -24,7 +24,7 @@ namespace Inventario.Domain
             Cantidad = pDatos.Cantidad;
             Costo = pDatos.Costo;
             Precio = pDatos.Precio;
-            Ingredientes = pDatos.Ingredientes ?? new List<Ingrediente>();
+            Ingredientes = pDatos.Ingredientes;
         }
 
         public virtual string Entrada(double pCantidad)

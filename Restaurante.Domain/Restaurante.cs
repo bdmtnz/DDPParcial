@@ -21,7 +21,7 @@ namespace Inventario.Domain
             Ventas = new List<Venta>();
         }
 
-        public string Entrada(int pProducto, double pCantidad)
+        public string Entrada(List<Entrada> pEntradas)
         {
             if(Productos == null)
                 return "Error: No hay productos registrados.";
@@ -29,31 +29,56 @@ namespace Inventario.Domain
             if (Productos.Count <= 0)
                 return "Error: No hay productos registrados.";
 
-            if (pCantidad <= 0)
-                return "Error: La cantidad debe ser mayor a cero.";
+            var Respuestas = "";
+            for (int i = 0; i < pEntradas.Count; i++)
+            {
 
-            var oProducto = Productos.FirstOrDefault(oRow => oRow.Id == pProducto);
-            if(oProducto == null)
-                return $"Error: No hay productos registrados que coincidan con '{pProducto}'.";
+                if (pEntradas[i].Cantidad <= 0)
+                    return "Error: La cantidad debe ser mayor a cero.";
 
-            return oProducto.Entrada(pCantidad);
+                var oProducto = Productos.FirstOrDefault(oRow => oRow.Id == pEntradas[i].ProductoId);
+
+                if (oProducto == null)
+                    return $"Error: No hay productos registrados que coincidan con '{pEntradas[i].ProductoId}'.";
+
+                Respuestas += oProducto.Entrada(pEntradas[i].Cantidad) + ";";
+            }
+
+            Respuestas = Respuestas.Trim(new char[] { ';' });
+            return Respuestas;
         }
 
-        public string Salida(int pProducto, double pCantidad)
+        public string Salida(List<Salida> pSalidas)
         {
-            if (pCantidad <= 0)
-                return "Error: La cantidad debe ser mayor a cero.";
+            var Resultado = "";
+            List<Producto> Vendidos = new List<Producto>();
 
-            var oProducto = Productos.FirstOrDefault(oRow => oRow.Id == pProducto);
-            if (oProducto == null)
-                return $"Error: No hay productos registrados que coincidan con '{pProducto}'.";
+            for (int i = 0; i < pSalidas.Count; i++)
+            {
+                if (pSalidas[i].Cantidad <= 0)
+                    return "Error: La cantidad debe ser mayor a cero.";
 
-            var Resultado = oProducto.Salida(pCantidad, oProductos);
+                var oProducto = Productos.FirstOrDefault(oRow => oRow.Id == pSalidas[i].ProductoId);
 
-            if (!Resultado.Contains("Error:"))
-                Ventas.Add(new Venta(0, oProducto.Costo, oProducto.Precio));
+                if (oProducto == null)
+                    return $"Error: No hay productos registrados que coincidan con '{pSalidas[i].ProductoId}'.";
+
+                Resultado += oProducto.Salida(pSalidas[i].Cantidad, oProductos) + ";";
+                Vendidos.Add(oProducto);
+            }
+
+            Resultado = Resultado.Trim(new char[] { ';' });
+            Vender(1, Vendidos);
 
             return Resultado;
+        }
+
+        public void Vender(int pId, List<Producto> pVendidos)
+        {
+            Ventas.Add
+            (
+                new Venta(Ventas.Count, pVendidos)
+            );
         }
     }
 }
