@@ -366,7 +366,7 @@ namespace ParcialUno
                 new ProductoDTO()
                 {
                     Id = 5,
-                    Nombre = "Combo perro",
+                    Nombre = "Perro",
                     Precio = 1500,
                     Ingredientes = new List<Ingrediente>()
                     {
@@ -393,7 +393,7 @@ namespace ParcialUno
             var Movimiento = new Movimiento(oProductoVendido, 2);
             string Respuesta = oRestaurante.Salida(new List<Movimiento>() { Movimiento });
 
-            Assert.AreEqual("Hecho: se ha generado 2 de Combo perro (Costo: 12800, Precio: 25000, Utilidad: 12200).", Respuesta);
+            Assert.AreEqual("Hecho: se ha generado 2 de Perro (Costo: 12800, Precio: 25000, Utilidad: 12200).", Respuesta);
 
             //Valida ventas
             Assert.AreEqual(1, oRestaurante.Ventas.Count);

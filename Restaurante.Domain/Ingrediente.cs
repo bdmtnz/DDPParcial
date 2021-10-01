@@ -8,18 +8,13 @@ namespace Inventario.Domain
 {
     public class Ingrediente
     {
-        public int ProductoId { get; private set; }
-        public double Cantidad { get; private set; }
-        public double Costo { get; private set; }
-        public double Precio { get; private set; }
-        public double Utilidad => Precio - Costo;
+        public readonly Producto Producto;
+        public double Cantidad { get; set; }
 
         public Ingrediente(Producto pProducto, double pCantidad)
         {
-            ProductoId = pProducto.Id;
+            Producto = pProducto;
             Cantidad = pCantidad;
-            Costo = pProducto.Costo;
-            Precio = pProducto.Precio;
         }
 
     }

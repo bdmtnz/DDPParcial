@@ -31,7 +31,7 @@ namespace Inventario.Domain
             return $"Hecho: su nueva cantidad es {Cantidad}.";
         }
 
-        public virtual string Salida(double pCantidad, ReadOnlyCollection<Producto> Stock = null)
+        public virtual string Salida(double pCantidad)
         {
             if (ValidarStock(pCantidad))
                 return $"Error: no cuenta con las unidades suficientes de {Nombre}.";
